@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-xyz/provider
+module github.com/spion/pulumi-hetznerdns/provider
 
 go 1.18
 
