@@ -33,7 +33,7 @@ pip install pulumi_hetznerdns
 To use from Go, use `go get` to grab the latest version of the library:
 
 ```bash
-go get github.com/pulumi/pulumi-hetznerdns/sdk/go/...
+go get github.com/spion/pulumi-hetznerdns/sdk/go/...
 ```
 
 ### .NET

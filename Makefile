@@ -2,9 +2,9 @@ PROJECT_NAME := hetznerdns Package
 
 SHELL            := /bin/bash
 PACK             := hetznerdns
-ORG              := pulumi
+ORG              := spion
 PROJECT          := github.com/${ORG}/pulumi-${PACK}
-NODE_MODULE_NAME := @pulumi/${PACK}
+NODE_MODULE_NAME := pulumi-${PACK}
 TF_NAME          := ${PACK}
 PROVIDER_PATH    := provider
 VERSION_PATH     := ${PROVIDER_PATH}/pkg/version.Version

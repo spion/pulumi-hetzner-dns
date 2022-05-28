@@ -1,0 +1,255 @@
+{
+    "name": "hetznerdns",
+    "description": "A Pulumi package for creating and managing Hetzner cloud DNS resources.",
+    "keywords": [
+        "pulumi",
+        "hetznerdns",
+        "category/cloud"
+    ],
+    "homepage": "https://www.pulumi.com",
+    "license": "Apache-2.0",
+    "attribution": "This Pulumi package is based on the [`hetznerdns` Terraform Provider](https://github.com/spion/terraform-provider-hetznerdns).",
+    "repository": "https://github.com/spion/pulumi-hetznerdns",
+    "publisher": "spion",
+    "meta": {
+        "moduleFormat": "(.*)(?:/[^/]*)"
+    },
+    "config": {
+        "variables": {
+            "apitoken": {
+                "type": "string",
+                "description": "The API access token to authenticate at Hetzner DNS API.\n"
+            }
+        },
+        "defaults": [
+            "apitoken"
+        ]
+    },
+    "provider": {
+        "description": "The provider type for the hetznerdns package. By default, resources use package-wide configuration\nsettings, however an explicit `Provider` instance may be created and passed during resource\nconstruction to achieve fine-grained programmatic control over provider settings. See the\n[documentation](https://www.pulumi.com/docs/reference/programming-model/#providers) for more information.\n",
+        "properties": {
+            "apitoken": {
+                "type": "string",
+                "description": "The API access token to authenticate at Hetzner DNS API.\n"
+            }
+        },
+        "required": [
+            "apitoken"
+        ],
+        "inputProperties": {
+            "apitoken": {
+                "type": "string",
+                "description": "The API access token to authenticate at Hetzner DNS API.\n"
+            }
+        },
+        "requiredInputs": [
+            "apitoken"
+        ]
+    },
+    "resources": {
+        "hetznerdns:index/record:Record": {
+            "description": "## # hetznerdns.Record Resource\n\nProvides a Hetzner DNS Recrods resource to create, update and delete DNS Records.\n\n{{% examples %}}\n## Example Usage\n{{% example %}}\n\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as hetznerdns from \"@pulumi/hetznerdns\";\n\nconst zone1 = hetznerdns.getZone({\n    name: \"zone1.online\",\n});\nconst www = new hetznerdns.Record(\"www\", {\n    zoneId: hetznerdns_zone.z1.id,\n    value: \"192.168.1.1\",\n    type: \"A\",\n    ttl: 60,\n});\n```\n```python\nimport pulumi\nimport pulumi_hetznerdns as hetznerdns\n\nzone1 = hetznerdns.get_zone(name=\"zone1.online\")\nwww = hetznerdns.Record(\"www\",\n    zone_id=hetznerdns_zone[\"z1\"][\"id\"],\n    value=\"192.168.1.1\",\n    type=\"A\",\n    ttl=60)\n```\n```csharp\nusing Pulumi;\nusing Hetznerdns = Pulumi.Hetznerdns;\n\nclass MyStack : Stack\n{\n    public MyStack()\n    {\n        var zone1 = Output.Create(Hetznerdns.GetZone.InvokeAsync(new Hetznerdns.GetZoneArgs\n        {\n            Name = \"zone1.online\",\n        }));\n        var www = new Hetznerdns.Record(\"www\", new Hetznerdns.RecordArgs\n        {\n            ZoneId = hetznerdns_zone.Z1.Id,\n            Value = \"192.168.1.1\",\n            Type = \"A\",\n            Ttl = 60,\n        });\n    }\n\n}\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi-hetznerdns/sdk/go/hetznerdns\"\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := hetznerdns.LookupZone(ctx, \u0026GetZoneArgs{\n\t\t\tName: \"zone1.online\",\n\t\t}, nil)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\t_, err = hetznerdns.NewRecord(ctx, \"www\", \u0026hetznerdns.RecordArgs{\n\t\t\tZoneId: pulumi.Any(hetznerdns_zone.Z1.Id),\n\t\t\tValue:  pulumi.String(\"192.168.1.1\"),\n\t\t\tType:   pulumi.String(\"A\"),\n\t\t\tTtl:    pulumi.Int(60),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport java.util.*;\nimport java.io.*;\nimport java.nio.*;\nimport com.pulumi.*;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        final var zone1 = Output.of(HetznerdnsFunctions.getZone(GetZoneArgs.builder()\n            .name(\"zone1.online\")\n            .build()));\n\n        var www = new Record(\"www\", RecordArgs.builder()        \n            .zoneId(hetznerdns_zone.z1().id())\n            .value(\"192.168.1.1\")\n            .type(\"A\")\n            .ttl(60)\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  www:\n    type: hetznerdns:Record\n    properties:\n      zoneId: ${hetznerdns_zone.z1.id}\n      value: 192.168.1.1\n      type: A\n      ttl: 60\nvariables:\n  zone1:\n    Fn::Invoke:\n      Function: hetznerdns:getZone\n      Arguments:\n        name: zone1.online\n```\n{{% /example %}}\n{{% /examples %}}\n\n## Import\n\nA Record can be imported using its `id`. Use the API to get all records of a zone and then copy the id.\n\ncurl \"https://dns.hetzner.com/api/v1/records\" \\\n\n\n\n\n\n-H 'Auth-API-Token$HETZNER_DNS_API_TOKEN' | jq . {\n\n \"records\"[\n\n\n\n {\n\n\n\n\n\n \"id\"\"3d60921a49eb384b6335766a\",\n\n\n\n\n\n \"type\"\"TXT\",\n\n\n\n\n\n \"name\"\"google._domainkey\",\n\n\n\n\n\n \"value\"\"\\\"anything:with:param\\\"\",\n\n\n\n\n\n \"zone_id\"\"rMu2waTJPbHr4\",\n\n\n\n\n\n \"created\"\"2020-08-18 19:11:02.237 +0000 UTC\",\n\n\n\n\n\n \"modified\"\"2020-08-28 19:51:41.275 +0000 UTC\"\n\n\n\n },\n\n\n\n {\n\n\n\n\n\n \"id\"\"ed2416cb6bc8a8055b22222\",\n\n\n\n\n\n \"type\"\"A\",\n\n\n\n\n\n \"name\"\"www\",\n\n\n\n\n\n \"value\"\"1.1.1.1\",\n\n\n\n\n\n \"zone_id\"\"rMu2waTJPbHr4\",\n\n\n\n\n\n \"created\"\"2020-08-27 20:55:38.745 +0000 UTC\",\n\n\n\n\n\n \"modified\"\"2020-08-27 20:55:38.745 +0000 UTC\"\n\n\n\n }\n\n ] } The command used above was copied from Hetzer DNS API docs. `jq` is used for formatting and is not required. Use the `id` to import a record.\n\n\n\n```sh\n $ pulumi import hetznerdns:index/record:Record dkim_1 ed2416cb6bc8a8055b22222\n```\n\n ",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the DNS record to create.\n"
+                },
+                "ttl": {
+                    "type": "integer",
+                    "description": "Time to live of this record.\n"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The type of the record.\n"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "zoneId": {
+                    "type": "string",
+                    "description": "Id of the DNS zone to create\nthe record in.\n"
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "value",
+                "zoneId"
+            ],
+            "inputProperties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the DNS record to create.\n"
+                },
+                "ttl": {
+                    "type": "integer",
+                    "description": "Time to live of this record.\n"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The type of the record.\n"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "zoneId": {
+                    "type": "string",
+                    "description": "Id of the DNS zone to create\nthe record in.\n",
+                    "willReplaceOnChanges": true
+                }
+            },
+            "requiredInputs": [
+                "type",
+                "value",
+                "zoneId"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Record resources.\n",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the DNS record to create.\n"
+                    },
+                    "ttl": {
+                        "type": "integer",
+                        "description": "Time to live of this record.\n"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of the record.\n"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "zoneId": {
+                        "type": "string",
+                        "description": "Id of the DNS zone to create\nthe record in.\n",
+                        "willReplaceOnChanges": true
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "hetznerdns:index/zone:Zone": {
+            "description": "## # hetznerdns.Zone Resource\n\nProvides a Hetzner DNS Zone resource to create, update and delete DNS Zones.\n\n{{% examples %}}\n## Example Usage\n{{% example %}}\n\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as hetznerdns from \"@pulumi/hetznerdns\";\n\nconst zone1 = new hetznerdns.Zone(\"zone1\", {\n    ttl: 3600,\n});\n```\n```python\nimport pulumi\nimport pulumi_hetznerdns as hetznerdns\n\nzone1 = hetznerdns.Zone(\"zone1\", ttl=3600)\n```\n```csharp\nusing Pulumi;\nusing Hetznerdns = Pulumi.Hetznerdns;\n\nclass MyStack : Stack\n{\n    public MyStack()\n    {\n        var zone1 = new Hetznerdns.Zone(\"zone1\", new Hetznerdns.ZoneArgs\n        {\n            Ttl = 3600,\n        });\n    }\n\n}\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi-hetznerdns/sdk/go/hetznerdns\"\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := hetznerdns.NewZone(ctx, \"zone1\", \u0026hetznerdns.ZoneArgs{\n\t\t\tTtl: pulumi.Int(3600),\n\t\t})\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport java.util.*;\nimport java.io.*;\nimport java.nio.*;\nimport com.pulumi.*;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        var zone1 = new Zone(\"zone1\", ZoneArgs.builder()        \n            .ttl(3600)\n            .build());\n\n    }\n}\n```\n```yaml\nresources:\n  zone1:\n    type: hetznerdns:Zone\n    properties:\n      ttl: 3600\n```\n{{% /example %}}\n{{% /examples %}}\n\n## Import\n\nA Zone can be imported using its `id`. Log in to the Hetzner DNS web frontend, navigate to the zone you want to import, and copy the id from the URL in your browser.\n\n```sh\n $ pulumi import hetznerdns:index/zone:Zone zone1 rMu2waTJPbHr4\n```\n\n ",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the DNS zone to create. Must be a valid\ndomain with top level domain. Meaning `\u003cdomain\u003e.de` or `\u003cdomain\u003e.io`. Don't\ninclude sub domains on this level. So, no `sub.\u003cdomain\u003e.io`. The Hetzner API\nrejects attempts to create a zone with a sub domain name. Use a record to\ncreate the sub domain.\n"
+                },
+                "ttl": {
+                    "type": "integer",
+                    "description": "Time to live of this zone.\n"
+                }
+            },
+            "required": [
+                "name",
+                "ttl"
+            ],
+            "inputProperties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the DNS zone to create. Must be a valid\ndomain with top level domain. Meaning `\u003cdomain\u003e.de` or `\u003cdomain\u003e.io`. Don't\ninclude sub domains on this level. So, no `sub.\u003cdomain\u003e.io`. The Hetzner API\nrejects attempts to create a zone with a sub domain name. Use a record to\ncreate the sub domain.\n",
+                    "willReplaceOnChanges": true
+                },
+                "ttl": {
+                    "type": "integer",
+                    "description": "Time to live of this zone.\n"
+                }
+            },
+            "requiredInputs": [
+                "ttl"
+            ],
+            "stateInputs": {
+                "description": "Input properties used for looking up and filtering Zone resources.\n",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the DNS zone to create. Must be a valid\ndomain with top level domain. Meaning `\u003cdomain\u003e.de` or `\u003cdomain\u003e.io`. Don't\ninclude sub domains on this level. So, no `sub.\u003cdomain\u003e.io`. The Hetzner API\nrejects attempts to create a zone with a sub domain name. Use a record to\ncreate the sub domain.\n",
+                        "willReplaceOnChanges": true
+                    },
+                    "ttl": {
+                        "type": "integer",
+                        "description": "Time to live of this zone.\n"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "functions": {
+        "hetznerdns:index/getZone:getZone": {
+            "description": "## # hetznerdns.Zone Data Source\n\nProvides details about a Hetzner DNS Zone.\n\n{{% examples %}}\n## Example Usage\n{{% example %}}\n\n```typescript\nimport * as pulumi from \"@pulumi/pulumi\";\nimport * as hetznerdns from \"@pulumi/hetznerdns\";\n\nconst zone1 = pulumi.output(hetznerdns.getZone({\n    name: \"zone1.online\",\n}));\n```\n```python\nimport pulumi\nimport pulumi_hetznerdns as hetznerdns\n\nzone1 = hetznerdns.get_zone(name=\"zone1.online\")\n```\n```csharp\nusing Pulumi;\nusing Hetznerdns = Pulumi.Hetznerdns;\n\nclass MyStack : Stack\n{\n    public MyStack()\n    {\n        var zone1 = Output.Create(Hetznerdns.GetZone.InvokeAsync(new Hetznerdns.GetZoneArgs\n        {\n            Name = \"zone1.online\",\n        }));\n    }\n\n}\n```\n```go\npackage main\n\nimport (\n\t\"github.com/pulumi/pulumi-hetznerdns/sdk/go/hetznerdns\"\n\t\"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n)\n\nfunc main() {\n\tpulumi.Run(func(ctx *pulumi.Context) error {\n\t\t_, err := hetznerdns.LookupZone(ctx, \u0026GetZoneArgs{\n\t\t\tName: \"zone1.online\",\n\t\t}, nil)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n}\n```\n```java\npackage generated_program;\n\nimport java.util.*;\nimport java.io.*;\nimport java.nio.*;\nimport com.pulumi.*;\n\npublic class App {\n    public static void main(String[] args) {\n        Pulumi.run(App::stack);\n    }\n\n    public static void stack(Context ctx) {\n        final var zone1 = Output.of(HetznerdnsFunctions.getZone(GetZoneArgs.builder()\n            .name(\"zone1.online\")\n            .build()));\n\n    }\n}\n```\n```yaml\nvariables:\n  zone1:\n    Fn::Invoke:\n      Function: hetznerdns:getZone\n      Arguments:\n        name: zone1.online\n```\n{{% /example %}}\n{{% /examples %}}",
+            "inputs": {
+                "description": "A collection of arguments for invoking getZone.\n",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the DNS zone to get data from.\n"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name"
+                ]
+            },
+            "outputs": {
+                "description": "A collection of values returned by getZone.\n",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The provider-assigned unique ID for this managed resource.\n"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "ttl": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "ttl",
+                    "id"
+                ]
+            }
+        }
+    },
+    "language": {
+        "csharp": {
+            "compatibility": "tfbridge20",
+            "namespaces": null,
+            "packageReferences": {
+                "Pulumi": "3.*"
+            }
+        },
+        "go": {
+            "generateExtraInputTypes": true,
+            "generateResourceContainerTypes": true,
+            "importBasePath": "github.com/pulumi/pulumi-hetznerdns/sdk/go/hetznerdns"
+        },
+        "nodejs": {
+            "compatibility": "tfbridge20",
+            "dependencies": {
+                "@pulumi/pulumi": "^3.0.0"
+            },
+            "devDependencies": {
+                "@types/mime": "^2.0.0",
+                "@types/node": "^10.0.0"
+            },
+            "disableUnionOutputTypes": true,
+            "packageDescription": "A Pulumi package for creating and managing Hetzner cloud DNS resources.",
+            "packageName": "",
+            "readme": "\u003e This provider is a derived work of the [Terraform Provider](https://github.com/spion/terraform-provider-hetznerdns)\n\u003e distributed under [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/). If you encounter a bug or missing feature,\n\u003e first check the [`pulumi/pulumi-hetznerdns` repo](https://github.com/pulumi/pulumi-hetznerdns/issues); however, if that doesn't turn up anything,\n\u003e please consult the source [`spion/terraform-provider-hetznerdns` repo](https://github.com/spion/terraform-provider-hetznerdns/issues).",
+            "typescriptVersion": ""
+        },
+        "python": {
+            "compatibility": "tfbridge20",
+            "readme": "\u003e This provider is a derived work of the [Terraform Provider](https://github.com/spion/terraform-provider-hetznerdns)\n\u003e distributed under [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/). If you encounter a bug or missing feature,\n\u003e first check the [`pulumi/pulumi-hetznerdns` repo](https://github.com/pulumi/pulumi-hetznerdns/issues); however, if that doesn't turn up anything,\n\u003e please consult the source [`spion/terraform-provider-hetznerdns` repo](https://github.com/spion/terraform-provider-hetznerdns/issues).",
+            "requires": {
+                "pulumi": "\u003e=3.0.0,\u003c4.0.0"
+            }
+        }
+    }
+}
