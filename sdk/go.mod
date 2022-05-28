@@ -1,4 +1,4 @@
-module github.com/pulumi/pulumi-hetznerdns/sdk
+module github.com/spion/pulumi-hetznerdns/sdk
 
 go 1.17
 

@@ -18,8 +18,8 @@ package main
 
 import (
 	"github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfbridge"
-	hetznerdns "github.com/pulumi/pulumi-hetznerdns/provider"
-	"github.com/pulumi/pulumi-hetznerdns/provider/pkg/version"
+	hetznerdns "github.com/spion/pulumi-hetznerdns/provider"
+	"github.com/spion/pulumi-hetznerdns/provider/pkg/version"
 )
 
 func main() {
