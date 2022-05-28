@@ -14,6 +14,7 @@ import * as utilities from "./utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as hetznerdns from "@pulumi/hetznerdns";
+ * import * as pulumi_hetznerdns from "pulumi-hetznerdns";
  *
  * const zone1 = hetznerdns.getZone({
  *     name: "zone1.online",
