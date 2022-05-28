@@ -1,5 +1,5 @@
 {
-    "name": "@pulumi/hetznerdns",
+    "name": "pulumi-hetznerdns",
     "version": "${VERSION}",
     "description": "A Pulumi package for creating and managing Hetzner cloud DNS resources.",
     "keywords": [
