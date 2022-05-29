@@ -61,7 +61,7 @@ build_nodejs:: VERSION := $(shell pulumictl get version --language javascript)
 build_nodejs:: install_plugins tfgen # build the node sdk
 	$(WORKING_DIR)/bin/$(TFGEN) nodejs --overlays provider/overlays/nodejs --out sdk/nodejs/
 	cd sdk/nodejs/ && \
-				jq ".scripts.install=.scripts.install + \" --server https://github.com/spion/pulumi-hetznerdns/releases/download/\$\" +\"{VERSION}\"" 	package.json > package.json.tmp && mv package.json.tmp package.json && \
+				jq '.scripts.install=.scripts.install + " --server https://github.com/spion/pulumi-hetznerdns/releases/download/$$" + "{VERSION}"' package.json > package.json.tmp && mv package.json.tmp package.json && \
 				yarn install && \
         yarn run tsc && \
 		cp -R scripts/ bin && \
