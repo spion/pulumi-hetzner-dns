@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc",
-    "install": "node scripts/install-pulumi-plugin.js resource hetznerdns ${VERSION} v1.5.14 --server https://api.github.com/repos/spion/pulumi-hetznerdns/releases"
+    "install": "node scripts/install-pulumi-plugin.js resource hetznerdns ${VERSION} --server https://github.com/spion/pulumi-hetznerdns/releases/download/{VERSION}"
   },
   "dependencies": {
     "@pulumi/pulumi": "^3.0.0"
