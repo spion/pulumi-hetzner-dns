@@ -61,11 +61,13 @@ build_nodejs:: VERSION := $(shell pulumictl get version --language javascript)
 build_nodejs:: install_plugins tfgen # build the node sdk
 	$(WORKING_DIR)/bin/$(TFGEN) nodejs --overlays provider/overlays/nodejs --out sdk/nodejs/
 	cd sdk/nodejs/ && \
-        yarn install && \
+				jq ".scripts.install=.scripts.install + \" $(VERSION) --server https://api.github.com/repos/spion/pulumi-hetznerdns/releases\"" 	package.json > package.json.tmp && mv package.json.tmp package.json && \
+				yarn install && \
         yarn run tsc && \
 		cp -R scripts/ bin && \
         cp ../../README.md ../../LICENSE package.json yarn.lock ./bin/ && \
 		sed -i.bak -e "s/\$${VERSION}/$(VERSION)/g" ./bin/package.json
+
 
 build_python:: PYPI_VERSION := $(shell pulumictl get version --language python)
 build_python:: install_plugins tfgen # build the python sdk
